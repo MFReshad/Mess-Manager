@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^9li3_p5xb1jcb)*2*86#*k%&2jp2bc!eyq#cv!1*1)$&iypsi'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True # changing 404 page from 'https://www.w3schools.com/django/django_404.php'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = []  
 
 
 # Application definition
@@ -86,6 +86,7 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'webapp.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

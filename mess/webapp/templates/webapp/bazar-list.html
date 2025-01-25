@@ -1,0 +1,94 @@
+{% extends "webapp/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    
+    <h1> {{user.in_mess}} </h1>
+    
+    <hr>
+    <div class="d-flex justify-content-between align-items-center flex-wrap">
+        <span class="h4">Bazar of - <strong id="demo"></strong></span>
+        {% if user.in_mess %}
+            {% if  user.is_admin %}
+                <a class="btn btn-outline-dark btn-md mt-2 mt-md-0" href="{% url 'add_bazar_list' user.in_mess %}">Add Bazar</a>
+                
+                {% endif %}
+        {% endif %}
+        
+    </div>
+    <hr>
+    
+    
+    <script>
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June", 
+            "July", "August", "September", "October", "November", "December"
+        ];
+    
+        // Get the current month or selected month from the template
+        {% if selected_month %}
+            const selectedMonth = "{{ selected_month }}"; // Django variable passed as string
+            const [year, month] = selectedMonth.split("-"); // Split 'YYYY-MM' into parts
+            const monthName = monthNames[parseInt(month) - 1]; // Get the month name
+        {% else %}
+            const currentDate = new Date();
+            const monthName = monthNames[currentDate.getMonth()]; // Current month name
+        {% endif %}
+    
+        // Update the element with the desired text
+        document.getElementById("demo").innerHTML = " | " + monthName + " | ";
+    </script>
+
+    {% comment %} <a class="btn btn-outline-dark btn-sm" href='{% url 'createData' %}'> Create new record </a> {% endcomment %}
+
+    <form method="GET" class="d-flex align-items-center gap-2 flex-wrap justify-content-end">
+        <input
+            type="month" 
+            id="month" 
+            name="month" 
+            class="form-control" 
+            style="max-width: 200px"
+            value="{{ selected_month }}">
+        <button type="submit" class="btn btn-primary" style="white-space: nowrap;">Filter</button>
+    </form>
+
+    <br>
+    
+    <table class="table table-hover table-bordered shadow">
+        <thead class="table-dark sticky-top mt-5">
+          <th scope="col"> No. </th>
+          <th scope="col"> Items </th>
+          <th scope="col"> Price </th>
+          <th scope="col"> Date </th>
+          <th scope="col"> View </th>
+        </thead>
+        <tbody>
+            {% if grouped_records %}
+                {% for record in grouped_records %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{record.items}}</td>
+                        <td>{{record.total_price}} &#2547; </td>
+                        <td>{{record.date}}</td>
+                        <td><a class="text-success" href="{% url 'bazar-list-date' record.date %}"> click </a></td> 
+                    </tr>
+             
+                {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="5" class="text-center">No records found for this month.</td>
+            </tr
+            {% endif %}
+            
+        </tbody>
+      </table> 
+      <br>
+
+     <div class="container bg-light bg-opacity-25">
+        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga ipsum, voluptatibus id illo minus similique aliquam a odio error adipisci omnis eligendi modi autem alias, sit totam aspernatur, repudiandae assumenda vel iusto. Nam, at! Maiores neque ipsa, tempora odio, quam natus eveniet vel quia doloremque, quo eius! Aliquid, dignissimos. Consequatur sunt nemo, consectetur illum, quia rerum quasi sed dolore nostrum, porro beatae accusamus! Omnis quibusdam esse eius nulla, suscipit eligendi voluptatibus odit? Fugiat architecto quo et provident consequatur! Excepturi dicta blanditiis assumenda unde consectetur delectus eum debitis eius, quas ad sed ab nisi minima incidunt iusto. Et sunt vero nemo.</p>
+     </div>
+
+
+    
+{% endblock %}

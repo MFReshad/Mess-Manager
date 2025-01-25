@@ -1,0 +1,71 @@
+{% extends "webapp/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    
+    <h1> {{user.in_mess}} </h1>
+    
+    <hr>
+    <div class="d-flex justify-content-between align-items-center flex-wrap">
+        <span class="h4">Bazar of - <strong id="">{{date}}</strong></span>
+        {% if user.in_mess %}
+            {% if  user.is_admin %}
+                <a class="btn btn-outline-dark btn-md mt-2 mt-md-0" href="{% url 'add_bazar_list' user.in_mess %}">Add Bazar</a>
+                
+                {% endif %}
+        {% endif %}
+        
+    </div>
+    <hr>
+
+
+<table class="table table-hover table-bordered shadow">
+    <thead class="table-dark sticky-top mt-5">
+      <th scope="col"> No. </th>
+      <th scope="col"> Item </th>
+      <th scope="col"> Quantity </th>
+      <th scope="col"> Unit </th>
+      <th scope="col"> Price </th>
+      <th scope="col"> Done by </th>
+      <th scope="col"> Date </th>
+    </thead>
+    <tbody>
+        {% if items %}
+            {% for item in items %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{item.item_name}}</td>
+                    {% if item.quantity %}
+                        <td>{{item.quantity}}</td>
+                    {% else %}
+                        <td> - </td>
+                    {% endif %}
+
+                    {% if item.unit %}
+                        <td>{{item.unit}}</td>
+                    {% else %}
+                        <td> - </td>
+                    {% endif %}
+
+                    <td>{{item.price}} &#2547; </td>
+                    
+                    {% if item.done_by %}
+                    <td>{{item.done_by}}</td>
+                    {% else %}
+                        <td> - </td>
+                    {% endif %}
+
+                    <td>{{item.date}}</td>
+                    {% comment %} <td><a class="text-success" href="{% url 'view-record' record.id %}"> click </a></td>  {% endcomment %}
+                </tr>
+            {% endfor %}
+            <tr class="table-info">
+                <td colspan="4" class="text-center"> <strong >Total Price -</strong> </td>
+                <td colspan="3" class="text-start"><strong> {{total_price}} &#2547; </strong> </td>
+            </tr>
+        {% endif %}
+    </tbody>
+  </table> 
+
+  {% endblock %}

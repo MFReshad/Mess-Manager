@@ -4,7 +4,7 @@
 
 {% block content %}
     
-    <h1> {{user}} Welcome</h1>
+    <h1> {{user.in_mess}} </h1>
 
     <hr>
 
@@ -43,5 +43,12 @@
         </tbody>
       </table>
       
+    {% if messages %}
+    {% for message in messages %}
+            {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
+    
+        {% endfor %}
+
+    {% endif %}
 
 {% endblock %}

@@ -1,0 +1,37 @@
+{% extends "webapp/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<body>
+    <div class="container bg-dark shadow-md p-5 bg-opacity-25 rounded form-group" >
+    {% comment %} <div class="container bg-dark shadow-md p-5 bg-opacity-25 form-group" > {% endcomment %}
+
+        <h3> Add Today's Bazar </h3>
+        
+        <hr>
+        <br>
+
+        <form method="POST" autocomplete="on" ">
+
+            {% csrf_token %}
+
+            {% comment %} {{form.as_p}} {% endcomment %}
+            {{form|crispy}}
+
+            <br>
+
+            <button type="submit" class="btn btn-dark w-100 btn-block p-2"> Add Bazar </button>
+
+        </form>
+
+        <br>
+
+    </div>
+
+    <br>
+
+</body>
+
+{% endblock  %}

@@ -22,7 +22,14 @@
                 {{form|crispy}}
     
                 <br>
-    
+                
+                {% if form.password.errors %}
+                    <ul>
+                        {% for error in form.password.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %} 
                 <button type="submit" class="btn btn-primary w-100 btn-block p-2"> Create account </button>
     
             </form>
