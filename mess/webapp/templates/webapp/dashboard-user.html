@@ -1,0 +1,43 @@
+{% extends "webapp/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <h1> {{user.in_mess}} </h1>
+        
+    <hr>
+    {{total_meal_cost}}    
+    <br>
+
+    <div class="card bg-dark  bg-opacity-10">
+        
+        <div class="card-body">
+
+            <h5 class="card-title shad"> {{user.first_name}} {{user.last_name}} </h5>
+            
+            <hr>
+
+            <p> <strong> ID : </strong> {{user.id}} </p> 
+            
+            <p> <strong> Username : </strong> {{user.username}} </p> 
+            
+            <p> <strong> Email : </strong> {{user.email}} </p> 
+
+            <p> <strong> Phone : </strong> {{user.phone}} </p> 
+
+ 
+        </div>
+        
+    </div>
+
+    <br> <br>
+{% comment %}     
+    <a class="btn btn-success btn-sm" href='{% url 'update-record' record.id %}'> Update record </a>
+
+    &nbsp; &nbsp;
+ 
+    <a class="btn btn-danger btn-sm" href='{% url 'delete-record' record.id %}'> Delete record </a>
+     {% endcomment %}
+
+{% endblock  %}

@@ -4,25 +4,28 @@
 
 {% block content %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Group</title>
-</head>
-<body>
-    <center>
-        <h1 class='mb-5'>Welcome to Mess Manager</h1>
-        
-        <form method="POST">
-            {% csrf_token %}
-            <label for="mess_name">Mess Code:</label>
-            <input type="text" id="mess_code" name="mess_code" required>
-            <button type="submit">Create Mess</button>
-        </form>
-    </center>
+<body class="text-center">
+    <h1>Join a Mess</h1>
+    <br>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="mess_code">Mess code:</label>
+        <input type="text" id="mess_code" name="mess_code" required>
+        <button type="submit">Join Mess</button>
+    </form>
+    <br>
+    <p class="fs-3">Or</p>
+
+    <a class="btn btn-dark" href="{% url 'create_mess' %}"> Create a Mess </a>
+
+    {% if messages %}
+    {% for message in messages %}
+            {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
+    
+        {% endfor %}
+
+    {% endif %}
 </body>
-</html>
+
 
 {% endblock %}

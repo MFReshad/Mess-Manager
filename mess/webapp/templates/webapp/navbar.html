@@ -47,13 +47,19 @@
               
               <li class="nav-item">
           
-                <a class="nav-link {% if request.path == '/bazar-list' %}active{% endif %}" href='{% url "bazar-list" %}'>Bazar  <i class="fa fa-home" aria-hidden="true"></i> </a>
+                <a class="nav-link {% if request.path == '/bazar-list' %}active{% endif %}" href='{% url "bazar-list" %}'>Bazar  </a>
+    
+              </li>
+
+              <li class="nav-item">
+          
+                <a class="nav-link {% if request.path == '/my-mess' %}active{% endif %}" href='{% url "my-mess" %}'>{{user.in_mess}}  </a>
     
               </li>
             {% else %}
               <li class="nav-item">
           
-                <a class="nav-link" href='{% url "create_mess" %}'>Join Mess &nbsp; <i class="fa fa-home" aria-hidden="true"></i> </a>
+                <a class="nav-link {% if request.path == '/join-mess' or request.path == '/create-mess' %}active{% endif %}" href='{% url "join_mess" %}'>Join Mess &nbsp; <i class="fa fa-home" aria-hidden="true"></i> </a>
     
               </li>
             {% endif %}

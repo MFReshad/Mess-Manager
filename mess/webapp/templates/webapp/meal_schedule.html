@@ -1,0 +1,62 @@
+{% extends "webapp/base.html" %}
+
+{% block content %}
+    
+{% comment %} <h1> {{user.in_mess}} </h1> {% endcomment %}
+<h2 class="text-center">Meal Schedule</h2>
+    
+<hr>
+<br>
+
+<div class="container text-center">
+    <div class="row">
+        <div class="col-sm">
+            <h3>Next's meals</h3>
+
+            <div class="container border mt-3 w-75">
+                <h5 class='mt-2'>Lunch</h5>
+                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Alias a omnis assumenda natus nostrum maiores aut numquam ipsum voluptate perspiciatis!</p>
+            </div>
+            <div class="container border mt-3 w-75">
+                <h5 class='mt-2'>Dinner</h5>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam possimus similique, in magni molestias, aspernatur repellat architecto qui, numquam accusamus officiis eaque doloremque nesciunt necessitatibus provident impedit harum tempore autem aliquid error recusandae? Adipisci et labore recusandae tempora, voluptate reiciendis, quod ex neque possimus consequatur autem est quis, fuga quos?</p>
+            </div>
+
+
+        </div>
+        
+        <div class="col-sm shadow p-3">
+            
+            <form method="post" >
+                {% csrf_token %}
+                <table  class="table ">
+                    <thead>
+                        <tr>
+                            <th>Day</th>
+                            <th>Lunch</th>
+                            <th>Dinner</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for meal in meals %}
+                        <tr>
+                            <td>{{ meal.get_day_display }}</td>
+                            <td>
+                                <input type="number" name="lunch_{{ meal.day }}" value="{{ meal.lunch }}" min="0">
+                            </td>
+                            <td>
+                                <input type="number" name="dinner_{{ meal.day }}" value="{{ meal.dinner }}" min="0">
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button class="btn btn-primary w-50 btn-block p-2" type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<br>
+
+{% endblock %}

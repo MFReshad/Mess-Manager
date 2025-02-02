@@ -192,9 +192,25 @@ class Bazar(models.Model):
 
 
 
+# # Meal Schedule
+class MealSchedule(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='mealschedule'
+    )
+    day = models.CharField(max_length=10, choices=[
+        ('sat', 'Saturday'), ('sun', 'Sunday'), ('mon', 'Monday'),
+        ('tue', 'Tuesday'), ('wed', 'Wednesday'), ('thu', 'Thursday'),
+        ('fri', 'Friday')
+    ])
+    lunch = models.IntegerField(default=0)  # Number of meals for lunch
+    dinner = models.IntegerField(default=0)  # Number of meals for dinner
 
+    class Meta:
+        unique_together = ('user', 'day')
 
-
-
-
-
+    def __str__(self):
+        return f"{self.user.username} - {self.day}: Lunch({self.lunch}), Dinner({self.dinner})"

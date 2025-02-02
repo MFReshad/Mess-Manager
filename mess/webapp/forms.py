@@ -6,7 +6,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms.widgets import PasswordInput, TextInput
 
-from . models import Record , User , Bazar , Mess
+from . models import Record , User , Bazar , Mess 
 
 # - Register/Create User
 
@@ -94,3 +94,10 @@ class AddBazarItem(forms.ModelForm):
         if request:
             mess = request.user.in_mess
             self.fields['done_by'].queryset = mess.user.all()
+
+
+
+
+
+
+

@@ -25,6 +25,11 @@ urlpatterns = [
     # mess
 
     path('create-mess', views.create_mess, name="create_mess"), 
+    path('join-mess', views.join_mess, name="join_mess"), 
+    # mess info
+    path('my-mess', views.my_mess, name="my-mess"), 
+    # leave mess
+    path('takingleave', views.leave_mess, name="leave-mess"), 
 
     #### bazar ####
     # view bazar list (User ,Admin)
@@ -35,5 +40,8 @@ urlpatterns = [
     # add bazar
     path('<str:mess_name_slug>/add_bazar_list/', views.add_bazar, name="add_bazar_list"),
 
+    ##### User Dashboard
+    path('dashboard_', views.user_dashboard, name=""),
 
+    path('meal-schedule', views.meal_schedule, name='meal_schedule'),
 ]

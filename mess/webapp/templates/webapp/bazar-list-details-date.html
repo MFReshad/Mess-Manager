@@ -19,53 +19,55 @@
     </div>
     <hr>
 
+    <table class="table table-hover table-bordered shadow">
+        <thead class="table-dark sticky-top mt-5">
+        <th scope="col"> No. </th>
+        <th scope="col"> Item </th>
+        <th scope="col" class="text-center"> Quantity </th>
+        <th scope="col" class="text-center"> Unit </th>
+        <th scope="col" class="text-end"> Price </th>
+        <th scope="col" class="text-center"> Done by </th>
+        <th scope="col" class="text-center"> Date </th>
+        </thead>
+        <tbody>
+            {% if items %}
+                {% for item in items %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{item.item_name}}</td>
+                        {% if item.quantity %}
+                            <td class="text-center">{{item.quantity}}</td>
+                        {% else %}
+                            <td class="text-center"> - </td>
+                        {% endif %}
 
-<table class="table table-hover table-bordered shadow">
-    <thead class="table-dark sticky-top mt-5">
-      <th scope="col"> No. </th>
-      <th scope="col"> Item </th>
-      <th scope="col"> Quantity </th>
-      <th scope="col"> Unit </th>
-      <th scope="col"> Price </th>
-      <th scope="col"> Done by </th>
-      <th scope="col"> Date </th>
-    </thead>
-    <tbody>
-        {% if items %}
-            {% for item in items %}
-                <tr>
-                    <td>{{forloop.counter}}</td>
-                    <td>{{item.item_name}}</td>
-                    {% if item.quantity %}
-                        <td>{{item.quantity}}</td>
-                    {% else %}
-                        <td> - </td>
-                    {% endif %}
+                        {% if item.unit %}
+                            <td class="text-center">{{item.unit}}</td>
+                        {% else %}
+                            <td class="text-center"> - </td>
+                        {% endif %}
 
-                    {% if item.unit %}
-                        <td>{{item.unit}}</td>
-                    {% else %}
-                        <td> - </td>
-                    {% endif %}
+                        <td class="text-end">{{item.price}} &#2547; </td>
+                        
+                        {% if item.done_by %}
+                            <td class="text-center">{{item.done_by}}</td>
+                        {% else %}
+                            <td class="text-center"> - </td>
+                        {% endif %}
 
-                    <td>{{item.price}} &#2547; </td>
-                    
-                    {% if item.done_by %}
-                    <td>{{item.done_by}}</td>
-                    {% else %}
-                        <td> - </td>
-                    {% endif %}
-
-                    <td>{{item.date}}</td>
-                    {% comment %} <td><a class="text-success" href="{% url 'view-record' record.id %}"> click </a></td>  {% endcomment %}
+                        <td class="text-center">{{item.date}}</td>
+                        {% comment %} <td><a class="text-success" href="{% url 'view-record' record.id %}"> click </a></td>  {% endcomment %}
+                    </tr>
+                {% endfor %}
+                <tr class="table-dark opacity-50">
+                    <td colspan="4" class="text-end border-0"> <strong >Total Price:  </strong> </td>
+                    <td colspan="1" class="text-end border-0"> <strong > {{total_price}} &#2547; </strong> </td>
+                    <td colspan="2" class="text-start border-0"><strong>  </strong> </td>
                 </tr>
-            {% endfor %}
-            <tr class="table-info">
-                <td colspan="4" class="text-center"> <strong >Total Price -</strong> </td>
-                <td colspan="3" class="text-start"><strong> {{total_price}} &#2547; </strong> </td>
-            </tr>
-        {% endif %}
-    </tbody>
-  </table> 
+            {% endif %}
+        </tbody>
+    </table> 
+
+    <br>
 
   {% endblock %}

@@ -1,0 +1,53 @@
+{% extends "webapp/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<body>
+    
+    <h1> {{mess.name}} </h1>
+    {% comment %} <br> {% endcomment %}
+    <p class="fs-4 m-0"> Mess Code </p>
+    <input type="text" value="{{mess.mess_code}}" id="myInput" readonly>
+    
+    &nbsp;
+    <button onclick="myFunction()" onmouseout="outFunc()" 
+    class='btn btn-dark btn-sm rounded' data-toggle="tooltip" data-placement="top" title="Copy to clipboard">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+        <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"></path>
+        <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"></path>
+      </svg>
+    </button>
+    <br>
+    <span class="fs-6" id="copyMessage"></span>
+    
+    <br>
+    
+    <a class="btn btn-danger btn-sm mt-3" href="{% url 'leave-mess' %}"> Leave Mess</a>
+
+
+    <script>
+      function myFunction() {
+        var copyText = document.getElementById("myInput");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); // For mobile devices
+        navigator.clipboard.writeText(copyText.value);
+    
+        var copyMessage = document.getElementById("copyMessage");
+        copyMessage.innerText = "Copied!";
+        
+        setTimeout(() => {
+            copyMessage.innerText = "";
+        }, 2000);
+    }
+    
+    function outFunc() {
+        var tooltip = document.querySelector("button");
+        tooltip.innerText = "Copy to clipboard";
+        tooltip.classList.remove("btn-success");
+    }
+    
+    </script>
+    
+</body>
+{% endblock %}
