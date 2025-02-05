@@ -27,6 +27,9 @@ from datetime import datetime , timedelta
 # from mess.webapp import models
 from django.views.decorators.cache import never_cache
 
+from . task import sleeptime , test_func
+
+
 # Homepage
 
 def home(request):
@@ -287,6 +290,15 @@ def my_mess(request):
         mess_info = Mess.objects.get(name = request.user.in_mess.name)
 
         context = {'mess': mess_info}
+
+        if request.POST:
+            lunch_time = request.POST.get('appt')
+            meal_time = request.POST.get('appt2')
+            
+            Mess.objects.update(name = request.user.in_mess.name , lunch_update_time = lunch_time, meal_update_time = meal_time)
+
+            return redirect(request.path)
+        
     else:
         return redirect('join_mess')
 
@@ -484,26 +496,44 @@ def meal_schedule(request):
     days_of_week = ["sat", "sun", "mon", "tue", "wed", "thu", "fri"]
 
     today = datetime.now() 
-    formating = datetime.strftime(today, "%A, %d-%b-%Y")
+    print(f'this is today - {today.hour}')
+    
     today_week = datetime.strftime(today, "%a").lower()
     
     lunch_, dinner_ = 0, 0
-
+    lunch_editable = None
     if user.in_mess:
-        next_meal =  NextDayMeal.objects.filter(user=user,day=today_week).first()
-        if next_meal and next_meal.day == today_week:
+        next_meal =  NextDayMeal.objects.filter(user=user).first()
+        showdate = next_meal.day
+        formating = datetime.strftime(showdate, "%A, %d-%b-%Y")
+        if next_meal:
             lunch_ = next_meal.lunch
             dinner_ = next_meal.dinner
-        else:
-            meal_today = MealSchedule.objects.filter(user=user,day=today_week).first()
-            lunch_ = meal_today.lunch
-            dinner_ = meal_today.dinner
 
-            NextDayMeal.objects.update(
-                    user=user,
-                    day = today_week,
-                    lunch= lunch_, dinner= dinner_
-                )
+            time = Mess.objects.filter(name = user.in_mess.name).first()
+            print(f'got from db - {time}')
+
+            if time:
+                lunch_hour = time.lunch_update_time.hour
+                print(lunch_hour)
+                meal_hour = time.meal_update_time.hour
+                print(meal_hour)
+                if today.hour < lunch_hour or today.hour > meal_hour:
+
+                    lunch_editable = True 
+                    print(lunch_editable)
+
+
+        # else:
+        #     meal_today = MealSchedule.objects.filter(user=user,day=today_week).first()
+        #     lunch_ = meal_today.lunch
+        #     dinner_ = meal_today.dinner
+
+        #     NextDayMeal.objects.update(
+        #             user=user,
+        #             day = today_week,
+        #             lunch= lunch_, dinner= dinner_
+        #         )
         
         if request.method == "POST" and 'btnform2' in request.POST:
             lunch_value = int(request.POST.get(f"_lunch_"))
@@ -550,4 +580,11 @@ def meal_schedule(request):
         )
     )
 
-    return render(request, "webapp/meal_schedule.html", {"meals": meals, "date":formating , 'lunch':lunch_ , 'dinner':dinner_})
+    return render(request, "webapp/meal_schedule.html", {"meals": meals, "date":formating , 'lunch':lunch_ , 'dinner':dinner_, 'edit_lunch' : lunch_editable})
+
+
+def test(request):
+    # sleeptime(5)
+    test_func.delay()
+    return HttpResponse('Done Task')
+    
