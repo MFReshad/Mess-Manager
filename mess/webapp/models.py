@@ -2,6 +2,7 @@ from django.db import models
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
+from django.utils.timezone import now
 
 import secrets
 import random
@@ -12,7 +13,9 @@ import string
 
 class Mess(models.Model):
     name = models.CharField(max_length=100)
-    mess_code = models.CharField(max_length=8, unique=True, blank=True)
+    mess_code = models.CharField(max_length=8, unique=True)
+
+    meal_update_time =  models.TimeField(default=now)
 
 
     def save(self, *args, **kwargs):
@@ -214,3 +217,29 @@ class MealSchedule(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.day}: Lunch({self.lunch}), Dinner({self.dinner})"
+    
+
+
+# NextDayMeal
+class NextDayMeal(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        unique=True,
+        null=True,
+        related_name='nextdaymeal'
+    )
+
+
+    lunch = models.IntegerField(default=0)  # Number of meals for lunch
+    dinner = models.IntegerField(default=0)
+    day = models.CharField(max_length=10, null=True)
+    # date = models.DateField(auto_now_add=True)
+
+    # update_time =  models.TimeField(default=now)
+    
+    # class Meta:
+    #     unique_together = ('user')
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.day} -  Lunch({self.lunch}), Dinner({self.dinner})  "

@@ -1,28 +1,37 @@
 {% extends "webapp/base.html" %}
 
 {% block content %}
-    
+
 {% comment %} <h1> {{user.in_mess}} </h1> {% endcomment %}
 <h2 class="text-center">Meal Schedule</h2>
     
 <hr>
+<div class="alert alert-dismissible alert-light">
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    <strong>Heads up!</strong> This <a href="#" class="alert-link">alert needs your attention</a>, but it's not super important.
+  </div>
 <br>
 
 <div class="container text-center">
     <div class="row">
         <div class="col-sm">
             <h3>Next's meals</h3>
-
-            <div class="container border mt-3 w-75">
-                <h5 class='mt-2'>Lunch</h5>
-                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Alias a omnis assumenda natus nostrum maiores aut numquam ipsum voluptate perspiciatis!</p>
-            </div>
-            <div class="container border mt-3 w-75">
-                <h5 class='mt-2'>Dinner</h5>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam possimus similique, in magni molestias, aspernatur repellat architecto qui, numquam accusamus officiis eaque doloremque nesciunt necessitatibus provident impedit harum tempore autem aliquid error recusandae? Adipisci et labore recusandae tempora, voluptate reiciendis, quod ex neque possimus consequatur autem est quis, fuga quos?</p>
-            </div>
-
-
+            <p>{{date}}</p>
+            <form method="post" >
+                {% csrf_token %}
+                <div class="container border mt-3 w-75">
+                    <h5 class='mt-2'>Lunch</h5>
+                    <span class="display-3"> 13:00 </span><br>
+                    <input type="number" name="_lunch_" id="" class="m-3 text-center" value='{{lunch}}'>
+                </div>
+                <div class="container border mt-3 w-75">
+                    <h5 class='mt-2'>Dinner</h5>
+                    <span class="display-3"> 21:00 </span><br>
+                    <input type="number" name="_dinner_" id="" class="m-3 text-center" value='{{dinner}}'>
+                </div>
+                <br>
+                <button class="btn btn-primary" name="btnform2" type='submit'> Update </button>
+            </form>
         </div>
         
         <div class="col-sm shadow p-3">
@@ -51,7 +60,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                <button class="btn btn-primary w-50 btn-block p-2" type="submit">Save</button>
+                <button class="btn btn-primary w-50 btn-block p-2" name="btnform1" type="submit">Save</button>
             </form>
         </div>
     </div>

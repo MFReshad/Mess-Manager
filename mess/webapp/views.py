@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate
 
 from django.contrib.auth.decorators import login_required
 
-from . models import Record, Mess, Bazar, User , MealSchedule
+from . models import Record, Mess, Bazar, User , MealSchedule , NextDayMeal
 
 from django.http import HttpResponse
 
@@ -22,7 +22,7 @@ from django.db.models.functions import Concat ,Coalesce
 from django.core.exceptions import ObjectDoesNotExist
 
 
-from datetime import datetime
+from datetime import datetime , timedelta
 
 # from mess.webapp import models
 from django.views.decorators.cache import never_cache
@@ -434,7 +434,7 @@ def add_bazar(request , mess_name_slug ):
 
 
 # view mess of info
-
+# not complete
 @login_required
 def user_dashboard(request):
 
@@ -469,8 +469,8 @@ def user_dashboard(request):
 
 # If total_price is None, default to 0.00
     total_month_cost_of_bazar = round(total_price if total_price is not None else 0.00 , 2)
-    print(all_records)
-    print(total_month_cost_of_bazar)
+    # print(all_records)
+    # print(total_month_cost_of_bazar)
     # round(n, 2)
 
     context = {'user': user_info, 'total_meal_cost' : total_month_cost_of_bazar}
@@ -483,7 +483,43 @@ def meal_schedule(request):
     user = request.user
     days_of_week = ["sat", "sun", "mon", "tue", "wed", "thu", "fri"]
 
-    if request.method == "POST":
+    today = datetime.now() 
+    formating = datetime.strftime(today, "%A, %d-%b-%Y")
+    today_week = datetime.strftime(today, "%a").lower()
+    
+    lunch_, dinner_ = 0, 0
+
+    if user.in_mess:
+        next_meal =  NextDayMeal.objects.filter(user=user,day=today_week).first()
+        if next_meal and next_meal.day == today_week:
+            lunch_ = next_meal.lunch
+            dinner_ = next_meal.dinner
+        else:
+            meal_today = MealSchedule.objects.filter(user=user,day=today_week).first()
+            lunch_ = meal_today.lunch
+            dinner_ = meal_today.dinner
+
+            NextDayMeal.objects.update(
+                    user=user,
+                    day = today_week,
+                    lunch= lunch_, dinner= dinner_
+                )
+        
+        if request.method == "POST" and 'btnform2' in request.POST:
+            lunch_value = int(request.POST.get(f"_lunch_"))
+            dinner_value = int(request.POST.get(f"_dinner_"))
+            NextDayMeal.objects.update(
+                user=user,
+                day = today_week,
+                lunch= lunch_value, dinner=dinner_value
+            )
+            print(lunch_value)
+            print(dinner_value)
+            print('Button 2')
+            return redirect(request.path)
+    
+
+    if request.method == "POST" and 'btnform1' in request.POST:
         for day in days_of_week:
             lunch_value = int(request.POST.get(f"lunch_{day}", 0))
             dinner_value = int(request.POST.get(f"dinner_{day}", 0))
@@ -494,6 +530,7 @@ def meal_schedule(request):
                 day=day,
                 defaults={"lunch": lunch_value, "dinner": dinner_value}
             )
+        return redirect(request.path)
 
     # Ensure all days exist with initial values (lunch=0, dinner=0)
     for day in days_of_week:
@@ -513,4 +550,4 @@ def meal_schedule(request):
         )
     )
 
-    return render(request, "webapp/meal_schedule.html", {"meals": meals})
+    return render(request, "webapp/meal_schedule.html", {"meals": meals, "date":formating , 'lunch':lunch_ , 'dinner':dinner_})
