@@ -19,11 +19,14 @@
             <p>{{date}}</p>
             <form method="post" >
                 {% csrf_token %}
-                <div class="container border mt-3 w-75">
-                    <h5 class='mt-2'>Lunch</h5>
-                    <span class="display-3"> 13:00 </span><br>
-                    <input type="number" name="_lunch_" id="" class="m-3 text-center" value='{{lunch}}'>
-                </div>
+                {% if edit_lunch %}
+                    <div class="container border mt-3 w-75">
+                        <h5 class='mt-2'>Lunch</h5>
+                        <span class="display-3"> 13:00 </span><br>
+                        <input type="number" name="_lunch_" id="" class="m-3 text-center" value='{{lunch}}'>
+                    </div>
+                {% endif %}
+                
                 <div class="container border mt-3 w-75">
                     <h5 class='mt-2'>Dinner</h5>
                     <span class="display-3"> 21:00 </span><br>
@@ -32,6 +35,10 @@
                 <br>
                 <button class="btn btn-primary" name="btnform2" type='submit'> Update </button>
             </form>
+            <br>
+            <br>
+            <br>
+            <br>
         </div>
         
         <div class="col-sm shadow p-3">

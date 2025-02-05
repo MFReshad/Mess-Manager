@@ -1,5 +1,31 @@
 .form-layout{
     border-radius: 15px;
-    width: 500px;
+    
 }
 
+body {
+    overflow-x: hidden;
+  }
+
+  form {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+
+
+  @media screen and (min-width: 480px) {
+    .form-layout{
+        border-radius: 15px;
+        width: 500px;
+    }
+    
+  }
+  @media screen and (max-width: 767px) {
+    table{
+        overflow-x: auto;
+        display: block;
+        white-space: nowrap;
+      }
+    
+  }

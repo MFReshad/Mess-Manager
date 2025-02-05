@@ -44,4 +44,6 @@ urlpatterns = [
     path('dashboard_', views.user_dashboard, name=""),
 
     path('meal-schedule', views.meal_schedule, name='meal_schedule'),
+
+    path('test' , views.test, name='test'),
 ]
