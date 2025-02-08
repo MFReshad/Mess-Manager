@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>..... MeSsss🤫.....</title>
+    <link id="css-link" rel="stylesheet" href="https://bootswatch.com/5/lux/bootstrap.min.css">
+    {% comment %} <link id="css-link" rel="stylesheet" href="https://bootswatch.com/5/litera/bootstrap.min.css"> {% endcomment %}
+    <link rel="stylesheet" href='{% static "css/style.css" %}'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body class="text-center m-5">
+    <div class="container p-5">
+            <p class='fs-1'>..... MeSsss🤫..... </p>
+            <hr>
+            <form method="POST">
+                {% csrf_token %}
+                <label for="mess_code">Mess code:</label>
+                <input type="text" id="mess_code" name="mess_code" required>
+                <button type="submit">Get Mess</button>
+            </form>
+        <br>
+    </div>
+
+    {% if messages %}
+    {% for message in messages %}
+            {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
+    
+        {% endfor %}
+
+    {% endif %}
+</body>
+
+<script src = '{% static "js/app.js" %}' ></script>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+</html>
+

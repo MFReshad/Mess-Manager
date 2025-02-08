@@ -43,7 +43,17 @@ urlpatterns = [
     ##### User Dashboard
     path('dashboard_', views.user_dashboard, name=""),
 
+    # #### Meal ####
+
+    # today's meal
+    path("get_mess", views.todays_meal_enter, name='todays_meal_login'),
+    path("todays_meal", views.todays_meal, name='todays_meal'),
+
+    # User Meal Schedule
     path('meal-schedule', views.meal_schedule, name='meal_schedule'),
+
+    # Meal list
+    path('meal', views.meal_, name='meal_list'),
 
     path('test' , views.test, name='test'),
 ]

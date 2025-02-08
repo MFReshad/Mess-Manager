@@ -8,7 +8,8 @@
 <hr>
 <div class="alert alert-dismissible alert-light">
     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    <strong>Heads up!</strong> This <a href="#" class="alert-link">alert needs your attention</a>, but it's not super important.
+    <strong>Heads up!</strong> This <span href="#" class="alert-link underline">alert needs your attention</span>, 
+    you need to update lunch before <strong class="fw-bold">{{user.in_mess.lunch_update_time}}</strong class="fw-bold"> & dinner before <strong>{{user.in_mess.meal_update_time}}</strong> !!!
   </div>
 <br>
 
@@ -16,20 +17,24 @@
     <div class="row">
         <div class="col-sm">
             <h3>Next's meals</h3>
-            <p>{{date}}</p>
+
+            <p >{{date}}</p>
+
             <form method="post" >
                 {% csrf_token %}
                 {% if edit_lunch %}
                     <div class="container border mt-3 w-75">
                         <h5 class='mt-2'>Lunch</h5>
-                        <span class="display-3"> 13:00 </span><br>
+                        <span class="display-3"> {{ tlunch }} </span><br>
+                        <span id="lunch-timer"></span><br>
                         <input type="number" name="_lunch_" id="" class="m-3 text-center" value='{{lunch}}'>
                     </div>
                 {% endif %}
                 
                 <div class="container border mt-3 w-75">
                     <h5 class='mt-2'>Dinner</h5>
-                    <span class="display-3"> 21:00 </span><br>
+                    <span class="display-3"> {{tmeal}} </span><br>
+                    <span id="dinner-timer"></span><br>
                     <input type="number" name="_dinner_" id="" class="m-3 text-center" value='{{dinner}}'>
                 </div>
                 <br>
@@ -74,5 +79,49 @@
 </div>
 
 <br>
+<br>
+
+<script>
+    function startCountdown(targetTime, elementId) {
+        function updateTimer() {
+            const now = new Date();
+            let target = new Date(now.toDateString() + ' ' + targetTime);
+            
+            if (now > target) {
+                target.setDate(target.getDate() + 1); // Move to the next day if the time has passed
+            }
+
+            const diff = target - now;
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            // Format to 2-digit display
+            const formattedTime = 
+                String(hours).padStart(2, '0') + " : " + 
+                String(minutes).padStart(2, '0') + " : " + 
+                String(seconds).padStart(2, '0');
+
+            document.getElementById(elementId).innerText = formattedTime;
+
+            if (diff <= 0) {
+                clearInterval(timer);
+                document.getElementById(elementId).innerText = "00 : 00 : 00";
+            }
+        }
+
+        updateTimer(); // Call once immediately
+        const timer = setInterval(updateTimer, 1000); // Update every second
+    }
+
+    // Get times from Django context variables
+    const lunchTime = "{{ tlunch }}";  // Example: "14:00"
+    const dinnerTime = "{{ tmeal }}";  // Example: "21:30"
+
+    // Start countdowns
+    startCountdown(lunchTime, "lunch-timer");
+    startCountdown(dinnerTime, "dinner-timer");
+</script>
+
 
 {% endblock %}

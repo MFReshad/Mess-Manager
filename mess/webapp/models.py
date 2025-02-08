@@ -211,14 +211,15 @@ class MealSchedule(models.Model):
         ('tue', 'Tuesday'), ('wed', 'Wednesday'), ('thu', 'Thursday'),
         ('fri', 'Friday')
     ])
-    lunch = models.IntegerField(default=0)  # Number of meals for lunch
-    dinner = models.IntegerField(default=0)  # Number of meals for dinner
+    lunch = models.IntegerField(default=1)  # Number of meals for lunch
+    dinner = models.IntegerField(default=1)  # Number of meals for dinner
 
     class Meta:
         unique_together = ('user', 'day')
 
     def __str__(self):
-        return f"{self.user.username} - {self.day}: Lunch({self.lunch}), Dinner({self.dinner})"
+        user_name = self.user.username if self.user else "Deleted User"
+        return f"{user_name} - {self.day}: Lunch({self.lunch}), Dinner({self.dinner})"
     
 
 
@@ -228,6 +229,13 @@ class NextDayMeal(models.Model):
         User,
         on_delete=models.SET_NULL,
         null=True,
+        related_name='nextdaymeal'
+    )
+    
+    mess = models.ForeignKey(
+        Mess,
+        on_delete=models.SET_NULL,
+        null=True,  # if Mess is deleted it will be NuLL
         related_name='nextdaymeal'
     )
 
@@ -242,8 +250,14 @@ class NextDayMeal(models.Model):
     # class Meta:
     #     unique_together = ('user')
     
+    def save(self, *args, **kwargs):
+        if not self.mess and self.user and self.user.in_mess:
+            self.mess = self.user.in_mess  # Automatically assign mess
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return f"{self.user.username} - {self.day} -  Lunch({self.lunch}), Dinner({self.dinner})  "
+        user_name = self.user.username if self.user else "Deleted User"
+        return f"{user_name} - {self.mess} - {self.day} -  Lunch({self.lunch}), Dinner({self.dinner})  "
     
 
 class Meal(models.Model):
@@ -267,6 +281,10 @@ class Meal(models.Model):
     
     date = models.DateField(auto_now_add=True)
 
+
     def save(self, *args, **kwargs):
-        self.total_meal = self.lunch + self.dinner
+        self.total_meal = int(self.lunch) + int(self.dinner)
         super().save(*args, **kwargs)
+    
+    def __str__(self):
+        return f"{self.user.username} ~ ( {self.date} ) ~  Lunch : {self.lunch} , Dinner : {self.dinner} , total: {self.total_meal} "

@@ -7,9 +7,9 @@ body {
     overflow-x: hidden;
   }
 
-  form {
+form {
     max-width: 100%;
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
   }
 
 

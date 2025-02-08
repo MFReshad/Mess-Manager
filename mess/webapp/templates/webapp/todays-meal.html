@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="10">
+    <title>{{mess_name}}</title>
+    <link id="css-link" rel="stylesheet" href="https://bootswatch.com/5/lux/bootstrap.min.css">
+    {% comment %} <link id="css-link" rel="stylesheet" href="https://bootswatch.com/5/litera/bootstrap.min.css"> {% endcomment %}
+    <link rel="stylesheet" href='{% static "css/style.css" %}'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body class="text-center mt-3 w-100">
+    <div class="container p-5">
+            
+
+        
+        <h1>{{mess_name}}</h1>
+        <hr>
+        <p>{{date}}</p>
+        <div class="row">
+            <div class="col-sm border P-3 m-5 w-75 btn btn-outline-secondary rounded shadow disabled">
+                <h5 class='mt-2'>Lunch</h5>
+                <span class="display-3 text-primary"> {{lunch}} </span>
+                {% comment %} <p>lunch - {{lunch}}</p> {% endcomment %}
+            </div>
+            <div class="col-sm border P-3 m-5 w-75 btn btn-outline-secondary rounded shadow">
+                <h5 class='mt-2'>Dinner</h5>
+                <span class="display-3 text-primary"> {{dinner}} </span>
+            </div>
+        </div>
+        
+        <br>
+        
+        <hr>
+
+        <br>
+
+        <table class="table p-0 m-0">
+            <thead>
+                <tr>
+                 <th>-</th> 
+                <th>Name</th>
+                <th>Lunch</th>
+                <th>Dinner</th>
+                <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for meal in meals %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{meal.user}}</td>
+                        <td>{{meal.lunch}}</td>
+                        <td>{{meal.dinner}}</td>
+                        <td>{{ meal.lunch|default:0|add:meal.dinner|default:0 }}</td>
+
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="5" class="text-center">No Meal Found</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+    </div>
+
+    {% if messages %}
+    {% for message in messages %}
+            {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
+    
+        {% endfor %}
+
+    {% endif %}
+</body>
+
+<script src = '{% static "js/app.js" %}' ></script>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+</html>
+

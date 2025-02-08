@@ -27,6 +27,7 @@ app.conf.beat_schedule = {
     'check_mess_update_times': {
         'task': 'webapp.tasks.update_next_day_meal',
         'schedule': crontab(minute='*'),  # Runs every minute
+        # 'schedule': crontab(hour=15, minute=25),
     },
 }
 

@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-^9li3_p5xb1jcb)*2*86#*k%&2jp2bc!eyq#cv!1*1)$&iypsi
 DEBUG = True # changing 404 page from 'https://www.w3schools.com/django/django_404.php'
 
 ALLOWED_HOSTS = []  
+# ALLOWED_HOSTS = ['192.168.0.109']  
 
 
 # Application definition
@@ -117,7 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Dhaka'
 
 USE_I18N = True
 
@@ -152,3 +153,32 @@ CELERY_RESULT_BACKEND = 'django-db'
 # Celery Beat
 
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console': {
+#             'level': 'DEBUG',
+#             'class': 'logging.StreamHandler',
+#         },
+#         'file': {
+#             'level': 'DEBUG',
+#             'class': 'logging.FileHandler',
+#             'filename': 'celery_debug.log',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['console', 'file'],
+#             'level': 'DEBUG',
+#             'propagate': True,
+#         },
+#         'celery': {
+#             'handlers': ['console', 'file'],
+#             'level': 'DEBUG',
+#             'propagate': True,
+#         },
+#     },
+# }

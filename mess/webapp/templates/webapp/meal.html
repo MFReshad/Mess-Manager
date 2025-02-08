@@ -1,0 +1,180 @@
+{% extends "webapp/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<h1> {{user.in_mess}} </h1>
+    
+<hr>
+<div class="d-flex justify-content-between align-items-center flex-wrap">
+    <span class="h4">Meal of - <strong id="demo"></strong></span>
+    {% comment %} {% if user.in_mess %}
+        {% if  user.is_admin %}
+            <a class="btn btn-outline-dark btn-md mt-2 mt-md-0" href="{% url 'add_bazar_list' user.in_mess %}">Add Bazar</a>
+            
+            {% endif %}
+    {% endif %} {% endcomment %}
+    
+</div>
+<hr>
+
+
+<script>
+    const monthNames = [
+        "January", "February", "March", "April", "May", "June", 
+        "July", "August", "September", "October", "November", "December"
+    ];
+
+    // Get the current month or selected month from the template
+    {% if selected_month %}
+        const selectedMonth = "{{ selected_month }}"; // Django variable passed as string
+        const [year, month] = selectedMonth.split("-"); // Split 'YYYY-MM' into parts
+        const monthName = monthNames[parseInt(month) - 1]; // Get the month name
+    {% else %}
+        const currentDate = new Date();
+        const monthName = monthNames[currentDate.getMonth()]; // Current month name
+    {% endif %}
+
+    // Update the element with the desired text
+    document.getElementById("demo").innerHTML = " | " + monthName + " | ";
+</script>
+
+{% comment %} <a class="btn btn-outline-dark btn-sm" href='{% url 'createData' %}'> Create new record </a> {% endcomment %}
+
+<form method="GET" class="d-flex align-items-center gap-2 flex-wrap justify-content-end">
+    <select id="user" name="user" class="form-control" style="max-width: 200px">
+        <option value="all" {% if selected_user == "all" %}selected{% endif %}>All Members</option>
+        {% for member in users_in_mess %}
+            <option value="{{ member.username }}" {% if selected_user == member.username %}selected{% endif %}>
+                {{ member.username }}
+            </option>
+        {% endfor %}
+    </select>
+
+    </select>
+
+    <input
+    type="month" 
+    id="month" 
+    name="month" 
+    class="form-control" 
+    style="max-width: 200px"
+    value="{{ selected_month }}">
+    
+    <button type="submit" class="btn btn-primary" style="white-space: nowrap;">Filter</button>
+</form>
+
+<br>
+
+<table class="table table-hover table-bordered shadow">
+    <thead class="table-dark sticky-top mt-5">
+      <th scope="col"> No. </th>
+      <th scope="col"> Name </th>
+      <th scope="col" > Lunch </th>
+      <th scope="col"> Dinner </th>
+      <th scope="col"> Total </th>
+      <th scope="col"> Date </i> </th>
+      {% if user.is_admin %}
+      <th scope="col"> View </th>
+      {% endif %}
+    </thead>
+    <tbody>
+        {% if user_meal_totals %}
+            {% for meal in user_meal_totals %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{meal.user}}</td>
+                    <td>{{meal.lunch}}</td>
+                    <td>{{meal.dinner}}</td>
+                    <td>{{meal.total_meal}}</td>
+                    <td>{{meal.date}}</td>
+                    {% if user.is_admin %}
+                    <td>
+                        <a class="text-success edit-btn" 
+                           data-bs-toggle="modal" 
+                           data-bs-target="#exampleModal" 
+                           data-user="{{ meal.user }}" 
+                           data-lunch="{{ meal.lunch }}" 
+                           data-dinner="{{ meal.dinner }}" 
+                           data-date="{{ meal.date }}">
+                           Edit
+                        </a>
+                    </td>
+                    {% endif %}
+                </tr>
+         
+            {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan="5" class="text-center">No records found for this month.</td>
+        </tr
+        {% endif %}
+        
+    </tbody>
+  </table> 
+  <br>
+
+  <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">  -  </h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          
+        </div>
+        {% comment %} <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div> {% endcomment %}
+      </div>
+    </div>
+  </div>
+
+ <div class="container bg-light bg-opacity-25">
+    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga ipsum, voluptatibus id illo minus similique aliquam a odio error adipisci omnis eligendi modi autem alias, sit totam aspernatur, repudiandae assumenda vel iusto. Nam, at! Maiores neque ipsa, tempora odio, quam natus eveniet vel quia doloremque, quo eius! Aliquid, dignissimos. Consequatur sunt nemo, consectetur illum, quia rerum quasi sed dolore nostrum, porro beatae accusamus! Omnis quibusdam esse eius nulla, suscipit eligendi voluptatibus odit? Fugiat architecto quo et provident consequatur! Excepturi dicta blanditiis assumenda unde consectetur delectus eum debitis eius, quas ad sed ab nisi minima incidunt iusto. Et sunt vero nemo.</p>
+ </div>
+ <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const editButtons = document.querySelectorAll(".edit-btn");
+    
+        editButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                // Get data from the clicked button
+                const user = this.getAttribute("data-user");
+                const lunch = this.getAttribute("data-lunch");
+                const dinner = this.getAttribute("data-dinner");
+                const total = this.getAttribute("data-total");
+                const date = this.getAttribute("data-date");
+    
+                // Update modal content
+                document.getElementById("exampleModalLabel").innerText = `${user} - ${date}`;
+                document.querySelector(".modal-body").innerHTML = `
+                    <form id="editMealForm" method="POST" ">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Lunch</label>
+                            <input type="number" class="form-control" name="lunch" value="${lunch}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Dinner</label>
+                            <input type="number" class="form-control" name="dinner" value="${dinner}">
+                        </div>
+                        <input type="hidden" name="user" value="${user}">
+                        <input type="hidden" name="date" value="${date}">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                `;
+            });
+        });
+    });
+    
+</script>
+
+{% endblock %}
